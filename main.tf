@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_virtual_machine" "main" {
-  count                 = 3
+  count                 = var.counts_of_VM
   name                  = "${var.prefix}-vm-${count.index}"
   location              = azurerm_resource_group.example.location
   resource_group_name   = azurerm_resource_group.example.name
@@ -41,4 +41,12 @@ resource "azurerm_virtual_machine" "main" {
 
 output "virtual_machine_name" {
   value = upper(azurerm_virtual_machine.main[0].name)
+}
+
+output "vm_tags" {
+  value = join(", ", [for k, v in azurerm_virtual_machine.main[0].tags : "${k}=${v}"])
+}
+
+output "vm_ids" {
+  value = [for vm in azurerm_virtual_machine.main : vm.id]
 }

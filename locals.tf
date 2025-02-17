@@ -10,4 +10,13 @@ locals {
       destination_port_range = 53
     }
   ]
+
+   vm_tags = {
+    for i in range(var.counts_of_VM):
+      "${var.prefix}-vm-${i}" => {
+        Name = "${var.prefix}-vm-${i}"
+        Environment = "${var.prefix}-vm-${i}".tags
+      }
+  }
 }
+
