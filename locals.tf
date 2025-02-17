@@ -10,5 +10,4 @@ locals {
       destination_port_range = 53
     }
   ]
-
-
+}
