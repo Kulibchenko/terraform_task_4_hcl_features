@@ -32,7 +32,7 @@ resource "azurerm_network_security_group" "main" {
     resource_group_name = azurerm_resource_group.example.name
 
     dynamic "security_rule" {
-        for_each = local.network_security_rules
+        for_each = var.locals.network_security_rules
         content {
             name                       = security_rule.value.name
             priority                   = security_rule.value.priority
@@ -43,5 +43,4 @@ resource "azurerm_network_security_group" "main" {
             destination_port_range     = security_rule.value.destination_port_range
         }
     }
-
 }
