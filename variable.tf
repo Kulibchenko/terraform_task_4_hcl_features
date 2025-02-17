@@ -3,5 +3,5 @@ variable "prefix" {
 }
 
 variable "nic_names" {
-    default = ["network-1", "network-2", "network-3"]
+  default = ["network-1", "network-2", "network-3"]
 }

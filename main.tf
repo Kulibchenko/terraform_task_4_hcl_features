@@ -1,15 +1,14 @@
 resource "azurerm_resource_group" "example" {
-  count = 3
-  name     = "${var.prefix}-${count.index}"
+  name     = var.prefix
   location = "West Europe"
 }
 
 resource "azurerm_virtual_machine" "main" {
-  count = 3
-  name                  = "${var.prefix}-vm"
-  location              = azurerm_resource_group.example[count.index].location
-  resource_group_name   = azurerm_resource_group.example[count.index].name
-  network_interface_ids = [azurerm_network_interface.main.id]
+  count                 = 3
+  name                  = "${var.prefix}-vm-${count.index}"
+  location              = azurerm_resource_group.example.location
+  resource_group_name   = azurerm_resource_group.example.name
+  network_interface_ids = [azurerm_network_interface.main[count.index].id]
   vm_size               = "Standard_DS1_v2"
 
   storage_image_reference {
@@ -41,12 +40,5 @@ resource "azurerm_virtual_machine" "main" {
 }
 
 output "virtual_machine_name" {
-  value = upper(azurerm_virtual_machine.main.name)
-}
-
-
-output "virtual_machine_id" {
-  value = {
-    for vm_name, vm in azurerm_virtual_machine.azurerm_resource_group.example: vm_name => vm.id
-  }
+  value = upper(azurerm_virtual_machine.main[0].name)
 }
