@@ -36,7 +36,7 @@ resource "azurerm_virtual_machine" "main" {
     environment = "staging"
   }
   lifecycle {
-    create_before_destroy = true
+    prevent_destroy = true
   }
 }
 
