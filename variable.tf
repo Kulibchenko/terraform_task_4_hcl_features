@@ -2,6 +2,6 @@ variable "prefix" {
   default = "tfvmex"
 }
 
-variable "network_names" {
+variable "nic_names" {
     default = ["network-1", "network-2", "network-3"]
 }
