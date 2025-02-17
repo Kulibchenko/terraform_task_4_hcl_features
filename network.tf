@@ -1,20 +1,21 @@
 resource "azurerm_virtual_network" "main" {
+  count = 3
   name                = "${var.prefix}-network"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example[count.index].location
+  resource_group_name = azurerm_resource_group.example[count.index].name
 }
 
 resource "azurerm_subnet" "internal" {
+  count = 3
   name                 = "internal"
-  resource_group_name  = azurerm_resource_group.example.name
+  resource_group_name  = azurerm_resource_group.example[count.index].name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_network_interface" "main" {
   for_each = toset(var.network_names)
-
   name                = "${var.prefix}-nic-${each.key}"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
@@ -27,12 +28,13 @@ resource "azurerm_network_interface" "main" {
 }
 
 resource "azurerm_network_security_group" "main" {
+    count = 3
     name = "example-nsg"
-    location = azurerm_resource_group.example.location
-    resource_group_name = azurerm_resource_group.example.name
+    location = azurerm_resource_group.example[count.index].location
+    resource_group_name = azurerm_resource_group.example[count.index].name
 
     dynamic "security_rule" {
-        for_each = var.locals.network_security_rules
+        for_each = local.network_security_rules
         content {
             name                       = security_rule.value.name
             priority                   = security_rule.value.priority
